@@ -11,7 +11,7 @@ WORKDIR /app
 
 # 4. Copy only the requirements file first to leverage Docker cache
 # This assumes your requirements.txt is inside the 'server' folder
-COPY server/requirements.txt .
+COPY requirements.txt .
 
 # 5. Install dependencies (without a virtual environment, which is redundant in Docker)
 RUN pip install -r requirements.txt
