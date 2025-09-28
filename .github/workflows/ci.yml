@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -r server/requirements.txt
+
+      - name: Lint placeholder
+        run: echo "add ruff/flake8 later"
+
+      - name: Build Docker
+        run: docker build -t marketing-ai-assistant -f infra/cloudrun.Dockerfile .

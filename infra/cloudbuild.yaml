@@ -1,0 +1,10 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '-t', 'gcr.io/gen-lang-client-0614902287/marketing-ai-assistant',
+    '-f', 'infra/cloudrun.Dockerfile',
+    '.'
+  ]
+images:
+- 'gcr.io/gen-lang-client-0614902287/marketing-ai-assistant'
