@@ -6,12 +6,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1
 
-# 3. Set the working directory
-WORKDIR /app
-
-# 4. Copy only the requirements file first to leverage Docker cache
+# 3. Copy only the requirements file first to leverage Docker cache
 # This assumes your requirements.txt is inside the 'server' folder
 COPY requirements.txt .
+
+# 4. Set the working directory
+WORKDIR /app
 
 # 5. Install dependencies (without a virtual environment, which is redundant in Docker)
 RUN pip install -r requirements.txt
