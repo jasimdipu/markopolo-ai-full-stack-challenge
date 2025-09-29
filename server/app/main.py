@@ -2,6 +2,8 @@ import asyncio
 import json
 import os
 from datetime import datetime, timezone
+from dotenv import load_dotenv
+load_dotenv()
 
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,7 +11,7 @@ from fastapi.responses import JSONResponse, StreamingResponse
 from .routes import plan
 
 
-app = FastAPI(title="RTCRM FastAPI")
+app = FastAPI(title="Marketing AI Assistant FastAPI")
 
 # CORS (relax for MVP; tighten in prod)
 app.add_middleware(
