@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { streamSSE } from "../../lib/sse";
+import { streamSSEPost } from "../../lib/sse";
 import { formatTime } from "../../lib/fmt";
 import SearchBar from "../../components/SearchBar";
 import MessageList from "../../components/MessageList";
@@ -18,7 +18,7 @@ export default function QueryPage({ searchParams }: { searchParams: { q?: string
   const [startedAt] = useState(() => Date.now());
   const abortRef = useRef<AbortController | null>(null);
 
-  const start = useMemo(() => async () => {
+  const start = useMemo(() => async (goal: string) => {
     setFrames([]);
     setError(null);
     abortRef.current?.abort();
@@ -26,9 +26,10 @@ export default function QueryPage({ searchParams }: { searchParams: { q?: string
     abortRef.current = ac;
 
     try {
-      // NOTE: swap to /plan (POST) when ready; /stream-demo is GET SSE
-      await streamSSE(`${API_BASE}/stream-demo`, ac.signal, (evt) => {
-        setFrames((prev) => [...prev, evt]);
+      await streamSSEPost(`${API_BASE}/plan`, { goal }, ac.signal, (evt) => {
+        // support server sending {step, payload} or {frame: "..."} etc.
+        const normalized = evt.step ? evt : (evt.frame ? evt.frame : evt);
+        setFrames((prev) => [...prev, normalized]);
       });
     } catch (e: any) {
       setError(e?.message || "Failed to fetch");
@@ -36,7 +37,7 @@ export default function QueryPage({ searchParams }: { searchParams: { q?: string
   }, []);
 
   useEffect(() => {
-    if (q) start();
+    if (q) start(q);
     return () => abortRef.current?.abort();
   }, [q, start]);
 
@@ -46,7 +47,7 @@ export default function QueryPage({ searchParams }: { searchParams: { q?: string
         <SearchBar initialQuery={q} />
         {!q ? <div className="muted">Type a question above.</div> : null}
         {error ? <ErrorState message={error} /> : null}
-        {!error && frames.length === 0 ? <LoadingSkeleton /> : null}
+        {!error && frames.length === 0 && q ? <LoadingSkeleton /> : null}
         <MessageList frames={frames} />
         <div className="muted mono" style={{ marginTop: 8 }}>
           {frames.length} frames • {formatTime(Date.now() - startedAt)}
