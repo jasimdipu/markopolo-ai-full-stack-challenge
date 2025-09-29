@@ -1,17 +1,20 @@
-FROM python:3.11.5-slim-bullseye
-
+FROM python:3.11-slim AS base
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1
 
-WORKDIR /app
+# Set workdir where your FastAPI package lives
+WORKDIR /app/server
 
-# copy into /app so pip finds it
-COPY requirements.txt ./ 
-RUN pip install -r requirements.txt
+# Install deps
+COPY requirements.txt .
+RUN python -m venv /venv && /venv/bin/pip install -r requirements.txt
 
-RUN addgroup --system app && adduser --system --ingroup app app
-COPY server/ .    # see note #3 below
-USER app
+# Copy the app
+COPY server/ .
+
+ENV PATH="/venv/bin:$PATH"
 EXPOSE 8080
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"]
+
+# With WORKDIR=/app/server, app.main:app resolves correctly
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
