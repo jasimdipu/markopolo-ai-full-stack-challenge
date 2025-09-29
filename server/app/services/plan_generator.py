@@ -1,13 +1,14 @@
 from .llm_client import LLMClient
 from ..utils.json_stream import yield_json_objects
 from ..utils.logger import setup_logger
+from ..services.llm_factory import llm_from_env
 
 logger = setup_logger(__name__)
 
 
 class PlanGenerator:
     def __init__(self, llm: LLMClient):
-        self.llm = llm
+        self.llm = llm or LLMClient()
         self.ANSWER_SYSTEM_PROMPT = """
                                     You are a campaign planner. Output ONLY JSON, no prose, matching:
                                         {
@@ -19,27 +20,13 @@ class PlanGenerator:
                                     """
 
     def stream_plan(self, goal: str):
-        logger.info(f"Starting plan generation for goal: {goal}")
-
-        # Example system prompt — refine later
-        prompt = f"""
-        {self.ANSWER_SYSTEM_PROMPT}\n
-        Goal: {goal}\n
-        Output JSON frames in steps: reasoning, audience, channel_mix, messages, schedule, final.
-        """
-        stream = self.llm.stream(prompt)
-
-        try:
-            for chunk in stream:
-                parts = getattr(chunk.candidates[0].content, "parts", [])
-                txt = "".join(getattr(p, "text", "") for p in parts)
-                for obj in yield_json_objects(txt):
-                    # keep only the keys we show on the UI
-                    answers = obj.get("answers") or []
-                    schedule = obj.get("schedule") or []
-                    frame = {"step": "answers", "payload": {"answers": answers, "schedule": schedule}}
-                    logger.debug(f"answers frame: {frame}")
-                    yield frame
-        except Exception as e:
-            logger.error(f"Error during plan generation: {e}")
-            yield f'{{"error": "{str(e)}"}}'
+        # ... (your prompt prep)
+        stream = self.llm.stream_json(self.ANSWER_SYSTEM_PROMPT)
+        buf = ""
+        for piece in stream:
+            buf += piece
+            # parse JSON objects from buf (your existing yield_json_objects)
+            for obj in yield_json_objects(buf):
+                answers = obj.get("answers") or []
+                schedule = obj.get("schedule") or []
+                yield {"step": "answers", "payload": {"answers": answers, "schedule": schedule}}
