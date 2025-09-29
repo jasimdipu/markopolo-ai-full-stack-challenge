@@ -6,6 +6,8 @@ from datetime import datetime, timezone
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
+from .routes import plan
+
 
 app = FastAPI(title="RTCRM FastAPI")
 
@@ -17,6 +19,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(plan.router)
 
 @app.get("/healthz")
 async def healthz():
