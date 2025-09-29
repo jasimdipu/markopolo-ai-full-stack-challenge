@@ -1,0 +1,12 @@
+:root { --bg:#0b0b0c; --card:#111214; --muted:#9aa0a6; --text:#e8eaed; --accent:#4f86ff; }
+* { box-sizing: border-box }
+html, body { padding:0; margin:0; background:var(--bg); color:var(--text); font:14px/1.4 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial }
+a { color:inherit; text-decoration:none }
+input, button { font:inherit }
+.container { max-width:1100px; margin:0 auto; padding:16px }
+.card { background:var(--card); border:1px solid #1e2227; border-radius:12px; }
+.row { display:flex; gap:12px }
+.col { display:flex; flex-direction:column; gap:12px }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace }
+.muted { color:var(--muted) }
+.hr { border-top:1px solid #1f2328; margin:10px 0 }
