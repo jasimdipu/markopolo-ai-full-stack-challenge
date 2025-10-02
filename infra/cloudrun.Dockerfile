@@ -10,11 +10,11 @@ WORKDIR /app/server
 COPY requirements.txt .
 RUN python -m venv /venv && /venv/bin/pip install -r requirements.txt
 
-# Copy the app
+# Copy the rtcrm
 COPY server/ .
 
 ENV PATH="/venv/bin:$PATH"
 EXPOSE 8080
 
-# With WORKDIR=/app/server, app.main:app resolves correctly
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+# With WORKDIR=/rtcrm/server, rtcrm.main:rtcrm resolves correctly
+CMD ["uvicorn", "rtcrm.main:app", "--host", "0.0.0.0", "--port", "8080"]

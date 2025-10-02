@@ -1,6 +1,8 @@
+import os, sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..")))
 from typing import Iterable
 from openai import OpenAI
-from app.utils.logger import setup_logger
+from server.rtcrm.utils.logger import (setup_logger)
 
 logger = setup_logger(__name__)
 

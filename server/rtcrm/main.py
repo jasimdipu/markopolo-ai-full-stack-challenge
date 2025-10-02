@@ -1,14 +1,16 @@
 import asyncio
 import json
-import os
+import os, sys
 from datetime import datetime, timezone
 from dotenv import load_dotenv
 load_dotenv()
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
-from .routes import plan
+from server.rtcrm.routes import plan
 
 
 app = FastAPI(title="Marketing AI Assistant FastAPI")

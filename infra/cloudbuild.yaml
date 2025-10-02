@@ -1,7 +1,7 @@
 substitutions:
   _REGION: europe-west1
   _SERVICE: marketing-ai-assistant
-  _REPO: app-images         # Artifact Registry repo name (create once)
+  _REPO: rtcrm-images         # Artifact Registry repo name (create once)
   _IMAGE: marketing-ai-assistant
 
 steps:

@@ -59,7 +59,7 @@ perplexity-like-rtcrm/
 ├─ web/
 │  ├─ package.json
 │  ├─ next.config.js
-│  └─ app/
+│  └─ rtcrm/
 │     ├─ page.tsx                 # Perplexity-like chat
 │     ├─ api/stream/route.ts      # Proxy to server SSE
 │     └─ components/

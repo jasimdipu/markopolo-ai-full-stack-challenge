@@ -1,4 +1,4 @@
-# --- core app ---
+# --- core rtcrm ---
 fastapi==0.114.0
 uvicorn[standard]==0.30.6
 orjson==3.10.7
@@ -17,3 +17,7 @@ starlette==0.38.2
 watchfiles==1.1.0
 openai>=1.30.0
 httpx>=0.27.0
+
+SQLAlchemy==2.0.35
+alembic==1.13.2
+psycopg[binary]==3.2.3
